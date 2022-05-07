@@ -1,8 +1,6 @@
 import { prisma } from "../src/database.js";
 
 async function main() {
-  //upsert = update/insert
-  //melhor que create por que pode dar conflito em campos unicos
   await prisma.recommendation.upsert({
     where: { name: "Sam Smith - Love Me More (Official Video)" },
     update: {},
