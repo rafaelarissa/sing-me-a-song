@@ -54,7 +54,6 @@ describe("Recommendations tests - POST /recommendations/:id/upvote", () => {
     await supertest(app).post("/recommendations").send(body);
     const recommendation = await supertest(app).get("/recommendations");
     const id = recommendation.body[0].id;
-    console.log(id);
 
     const response = await supertest(app)
       .post(`/recommendations/${id}/upvote`)
