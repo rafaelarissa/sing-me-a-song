@@ -115,6 +115,30 @@ describe("GET /recommendations", () => {
   });
 });
 
+describe("GET /recommendations/:id", () => {
+  it("should return 200 given existing recommendation id", async () => {
+    const body: CreateRecommendationData = {
+      name: "Joji Best Songs Collections - Joji Greatest Hits - Joji Songs Full Playlist - The Best Of Joji",
+      youtubeLink: "https://www.youtube.com/watch?v=81AShKbT_TY",
+    };
+
+    await supertest(app).post("/recommendations").send(body);
+    const recommendation = await supertest(app).get("/recommendations");
+    const id = recommendation.body[0].id;
+
+    const response = await supertest(app).get(`/recommendations/${id}`);
+
+    expect(response.status).toEqual(200);
+  });
+
+  it("should return 404 given unexisting recommendation id", async () => {
+    const id = 0;
+    const response = await supertest(app).get(`/recommendations/${id}`);
+
+    expect(response.status).toEqual(404);
+  });
+});
+
 async function disconnect() {
   await prisma.$disconnect();
 }
