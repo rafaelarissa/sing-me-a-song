@@ -2,6 +2,7 @@ import supertest from "supertest";
 import app from "../src/app";
 import { prisma } from "../src/database.js";
 import { CreateRecommendationData } from "../src/services/recommendationsService.js";
+import recommendationBodyFactory from "./factory/recommendationBodyFactory.js";
 
 describe("Recommendations tests - POST /recommendations", () => {
   beforeEach(truncateRecommendations);
@@ -107,6 +108,10 @@ describe("Recommendations tests - POST /recommendations/:id/downvote", () => {
 });
 
 describe("GET /recommendations", () => {
+  beforeEach(truncateRecommendations);
+
+  afterAll(disconnect);
+
   it("should return 200 and contain less than 11 items", async () => {
     const response = await supertest(app).get("/recommendations");
 
@@ -116,6 +121,10 @@ describe("GET /recommendations", () => {
 });
 
 describe("GET /recommendations/:id", () => {
+  beforeEach(truncateRecommendations);
+
+  afterAll(disconnect);
+
   it("should return 200 given existing recommendation id", async () => {
     const body: CreateRecommendationData = {
       name: "Joji Best Songs Collections - Joji Greatest Hits - Joji Songs Full Playlist - The Best Of Joji",
@@ -134,6 +143,45 @@ describe("GET /recommendations/:id", () => {
   it("should return 404 given unexisting recommendation id", async () => {
     const id = 0;
     const response = await supertest(app).get(`/recommendations/${id}`);
+
+    expect(response.status).toEqual(404);
+  });
+});
+
+describe("GET /recommendations/top/:ammount", () => {
+  beforeEach(truncateRecommendations);
+
+  afterAll(disconnect);
+
+  it("should return 200 if get top songs correctly", async () => {
+    const amount = 3;
+    const body = recommendationBodyFactory();
+
+    await supertest(app).post("/recommendations").send(body);
+
+    const response = await supertest(app).get(`/recommendations/top/${amount}`);
+    expect(response.body.length).toBeLessThanOrEqual(amount);
+  });
+});
+
+describe("GET /recommendations/random", () => {
+  beforeEach(truncateRecommendations);
+
+  afterAll(disconnect);
+
+  it("should return 200 given a score more or equal to 10", async () => {
+    const recommendations = recommendationBodyFactory();
+
+    const create = await prisma.recommendation.create({
+      data: { ...recommendations[0], score: 100 },
+    });
+
+    const response = await supertest(app).get("/recommendations/random");
+
+    expect(response.body).toEqual(create);
+  });
+  it("should return 404 given no recommendation", async () => {
+    const response = await supertest(app).get("/recommendations/random");
 
     expect(response.status).toEqual(404);
   });
