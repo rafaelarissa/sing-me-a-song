@@ -2,7 +2,7 @@
 
 Sing me a Song is an app for song recommendations, the more people like a recommendation the recommendation will be shown to more people. 
 
-##Features
+## Features
 - Search for a song
 - Score a song
 - Get top songs based on score
