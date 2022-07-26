@@ -38,6 +38,11 @@ npm run dev
 ```bash
 npm run build
 ```
-5. Finally, access http://localhost:3000 on your favorite browser
+6. Finally, access http://localhost:3000 on your favorite browser
+
+7. If you wish to run tests
+```bash
+npm test
+```
 
 
