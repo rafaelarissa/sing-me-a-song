@@ -2,7 +2,7 @@
 
 Sing me a Song is an app for song recommendations, the more people like a recommendation the recommendation will be shown to more people. 
 
-##Features
+## Features
 - Search for a song
 - Score a song
 - Get top songs based on score
@@ -38,6 +38,11 @@ npm run dev
 ```bash
 npm run build
 ```
-5. Finally, access http://localhost:3000 on your favorite browser
+6. Finally, access http://localhost:3000 on your favorite browser
+
+7. If you wish to run tests
+```bash
+npm test
+```
 
 
