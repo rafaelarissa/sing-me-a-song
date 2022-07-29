@@ -38,7 +38,7 @@ Cypress.Commands.add("createRecommendation", (recommendation) => {
   cy.wait("@createRecommendation");
 });
 
-Cypress.Commands.add("increaseTest", (recommendation) => {
+Cypress.Commands.add("upvote", (recommendation) => {
   cy.contains(recommendation.name)
     .get("article")
     .within(() => {
@@ -60,7 +60,7 @@ Cypress.Commands.add("increaseTest", (recommendation) => {
     });
 });
 
-Cypress.Commands.add("decreaseTest", (recommendation) => {
+Cypress.Commands.add("downvote", (recommendation) => {
   cy.contains(recommendation.name)
     .get("article")
     .within(() => {
@@ -99,11 +99,7 @@ Cypress.Commands.add("alertTest", () => {
 });
 
 Cypress.Commands.add("resetDatabase", () => {
-  cy.request(
-    "POST",
-    "http://localhost:5000/recommendations/e2e/reset-database",
-    {}
-  );
+  cy.request("POST", "http://localhost:5000/e2e/reset-database", {});
 });
 
 Cypress.Commands.add("seedDB", () => {
