@@ -1,32 +1,20 @@
 /// <reference types="cypress" />
 
-import { faker } from "@faker-js/faker";
+import recommendationBodyFactory from "./factories/recommendationBodyFactory";
 
 describe("recomendation suit test", () => {
   beforeEach(() => {
-    cy.request("POST", "http://localhost:5000/e2e/reset-database", {});
+    cy.resetDatabase();
   });
 
   it("should create a new recommendation given a valid input", () => {
-    const recommendation = {
-      name: faker.music.songName(),
-      link: "https://www.youtube.com/watch?v=7aekxC_monc",
-    };
+    const recommendation = recommendationBodyFactory();
 
-    cy.visit("http://localhost:3000");
-
-    cy.get('input[placeholder="Name"]').type(recommendation.name);
-    cy.get('input[placeholder="https://youtu.be/..."]').type(
-      recommendation.link
-    );
-
-    cy.intercept("POST", "http://localhost:5000/recommendations").as(
-      "createRecommendation"
-    );
-    cy.get("button").click();
-    cy.wait("@createRecommendation");
+    cy.createRecommendation(recommendation);
 
     cy.contains(recommendation.name);
+
+    cy.end();
   });
 
   it("add a vote point to a recommendation", () => {

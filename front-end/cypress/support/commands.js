@@ -24,21 +24,18 @@
 // -- This will overwrite an existing command --
 // Cypress.Commands.overwrite('visit', (originalFn, url, options) => { ... })
 
-Cypress.Commands.add("createRecommendationTest", (recommendation) => {
+Cypress.Commands.add("createRecommendation", (recommendation) => {
   cy.visit("http://localhost:3000/");
 
   cy.get('input[placeholder="Name"]').type(recommendation.name);
-  cy.get('input[placeholder="https://youtu.be/..."]').type(
-    recommendation.youtubeLink
-  );
+  cy.get('input[placeholder="https://youtu.be/..."]').type(recommendation.link);
 
   cy.intercept("POST", "http://localhost:5000/recommendations").as(
-    "createRecommendations"
+    "createRecommendation"
   );
 
   cy.get("button").click();
-
-  cy.wait("@createRecommendations");
+  cy.wait("@createRecommendation");
 });
 
 Cypress.Commands.add("increaseTest", (recommendation) => {
@@ -101,8 +98,12 @@ Cypress.Commands.add("alertTest", () => {
   });
 });
 
-Cypress.Commands.add("resetDB", () => {
-  cy.request("POST", "http://localhost:5000/recommendations/reset", {});
+Cypress.Commands.add("resetDatabase", () => {
+  cy.request(
+    "POST",
+    "http://localhost:5000/recommendations/e2e/reset-database",
+    {}
+  );
 });
 
 Cypress.Commands.add("seedDB", () => {
