@@ -82,7 +82,7 @@ Cypress.Commands.add("downvote", (recommendation) => {
     });
 });
 
-Cypress.Commands.add("deleteTest", (recommendation) => {
+Cypress.Commands.add("deleteRecommendation", (recommendation) => {
   Cypress._.times(6, (k) => {
     cy.contains(recommendation.name)
       .get("article")

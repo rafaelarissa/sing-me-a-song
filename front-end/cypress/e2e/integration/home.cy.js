@@ -36,4 +36,14 @@ describe("recommendation suit test", () => {
 
     cy.end();
   });
+
+  it("should delete a recommendation with less than -5 points", () => {
+    const recommendation = recommendationBodyFactory();
+
+    cy.createRecommendation(recommendation);
+
+    cy.deleteRecommendation(recommendation);
+
+    cy.end();
+  });
 });
