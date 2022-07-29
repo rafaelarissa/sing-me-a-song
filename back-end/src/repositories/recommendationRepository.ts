@@ -83,10 +83,12 @@ async function seed() {
       {
         name: "Oceans",
         youtubeLink: "https://www.youtube.com/watch?v=aqsL0QQaSP4",
+        score: 112,
       },
       {
         name: "I Like You (A Happier Song) w. Doja Cat",
         youtubeLink: "https://www.youtube.com/watch?v=7aekxC_monc",
+        score: 343,
       },
     ],
   });
