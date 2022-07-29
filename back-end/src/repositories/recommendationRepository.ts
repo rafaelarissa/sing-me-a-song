@@ -73,6 +73,25 @@ async function truncate() {
   await prisma.$executeRaw`TRUNCATE TABLE recommendations`;
 }
 
+async function seed() {
+  await prisma.recommendation.createMany({
+    data: [
+      {
+        name: "Heathens",
+        youtubeLink: "https://www.youtube.com/watch?v=etIXDCSB_VU",
+      },
+      {
+        name: "Oceans",
+        youtubeLink: "https://www.youtube.com/watch?v=aqsL0QQaSP4",
+      },
+      {
+        name: "I Like You (A Happier Song) w. Doja Cat",
+        youtubeLink: "https://www.youtube.com/watch?v=7aekxC_monc",
+      },
+    ],
+  });
+}
+
 export const recommendationRepository = {
   create,
   findAll,
@@ -82,4 +101,5 @@ export const recommendationRepository = {
   getAmountByScore,
   remove,
   truncate,
+  seed,
 };

@@ -86,6 +86,10 @@ async function truncate() {
   recommendationRepository.truncate();
 }
 
+async function seed() {
+  recommendationRepository.seed();
+}
+
 export const recommendationService = {
   insert,
   upvote,
@@ -95,4 +99,5 @@ export const recommendationService = {
   getById: getByIdOrFail,
   getTop,
   truncate,
+  seed,
 };

@@ -7,4 +7,10 @@ async function reset(req: Request, res: Response) {
   res.sendStatus(200);
 }
 
-export default { reset };
+async function seed(req: Request, res: Response) {
+  await recommendationService.seed();
+
+  res.sendStatus(200);
+}
+
+export default { reset, seed };
