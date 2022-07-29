@@ -99,9 +99,9 @@ Cypress.Commands.add("alertTest", () => {
 });
 
 Cypress.Commands.add("resetDatabase", () => {
-  cy.request("POST", "http://localhost:5000/e2e/reset-database", {});
+  cy.request("POST", "http://localhost:5000/e2e/reset", {});
 });
 
-Cypress.Commands.add("seedDB", () => {
-  cy.request("POST", "http://localhost:5000/recommendations/seed", {});
+Cypress.Commands.add("seedDatabase", () => {
+  cy.request("POST", "http://localhost:5000/e2e/seed", {});
 });
