@@ -1,3 +1,5 @@
+import { CreateRecommendationData } from "./../../src/services/recommendationsService";
+
 export default function recommendationBodyFactory() {
   const body = [
     {

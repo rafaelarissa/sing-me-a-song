@@ -3,6 +3,7 @@ import app from "../src/app";
 import { prisma } from "../src/database.js";
 import { CreateRecommendationData } from "../src/services/recommendationsService.js";
 import recommendationBodyFactory from "./factory/recommendationBodyFactory.js";
+import recommendationFactory from "./factory/recommendationsFactory";
 
 describe("Recommendations tests - POST /recommendations", () => {
   beforeEach(truncateRecommendations);
@@ -10,17 +11,16 @@ describe("Recommendations tests - POST /recommendations", () => {
   afterAll(disconnect);
 
   it("should return 201 given a valid body", async () => {
-    const body: CreateRecommendationData = {
-      name: "Falamansa - Xote dos Milagres",
-      youtubeLink: "https://www.youtube.com/watch?v=chwyjJbcs1Y",
-    };
+    const body = recommendationBodyFactory();
 
-    const response = await supertest(app).post("/recommendations").send(body);
+    const response = await supertest(app)
+      .post("/recommendations")
+      .send(body[0]);
 
     expect(response.status).toEqual(201);
   });
 
-  it("should return 422 given a invalid body", async () => {
+  it("should return 422 given invalid body", async () => {
     const body = {};
 
     const response = await supertest(app).post("/recommendations").send(body);
@@ -28,16 +28,19 @@ describe("Recommendations tests - POST /recommendations", () => {
     expect(response.status).toEqual(422);
   });
 
-  it("should return 409 given a existing name", async () => {
-    const body: CreateRecommendationData = {
-      name: "Falamansa - Xote dos Milagres",
-      youtubeLink: "https://www.youtube.com/watch?v=chwyjJbcs1Y",
-    };
+  it("should return 409 given an existing name", async () => {
+    const body = recommendationBodyFactory();
 
-    await supertest(app).post("/recommendations").send(body);
-    const response = await supertest(app).post("/recommendations").send(body);
+    await supertest(app).post("/recommendations").send(body[0]);
+    const response = await supertest(app)
+      .post("/recommendations")
+      .send(body[0]);
+    const recommendations = await prisma.recommendation.findMany({
+      where: { name: body[0].name },
+    });
 
     expect(response.status).toEqual(409);
+    expect(recommendations.length).toEqual(1);
   });
 });
 
