@@ -20,5 +20,7 @@ describe("Random page tests", () => {
         expect(text).to.be.greaterThan(-6);
       });
     });
+
+    cy.end();
   });
 });

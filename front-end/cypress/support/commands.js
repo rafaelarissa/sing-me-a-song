@@ -92,12 +92,6 @@ Cypress.Commands.add("deleteRecommendation", (recommendation) => {
   });
 });
 
-Cypress.Commands.add("alertTest", () => {
-  cy.on("window:alert", (text) => {
-    expect(text).to.contains("Error creating recommendation!");
-  });
-});
-
 Cypress.Commands.add("resetDatabase", () => {
   cy.request("POST", "http://localhost:5000/e2e/reset", {});
 });
