@@ -1,9 +1,9 @@
 import supertest from "supertest";
-import app from "../src/app";
-import { prisma } from "../src/database.js";
-import { CreateRecommendationData } from "../src/services/recommendationsService.js";
-import recommendationBodyFactory from "./factory/recommendationBodyFactory.js";
-import recommendationFactory from "./factory/recommendationsFactory";
+import app from "../../src/app";
+import { prisma } from "../../src/database.js";
+import { CreateRecommendationData } from "../../src/services/recommendationsService.js";
+import recommendationBodyFactory from "../factory/recommendationBodyFactory.js";
+import recommendationFactory from "../factory/recommendationsFactory";
 
 describe("Recommendations tests - POST /recommendations", () => {
   beforeEach(truncateRecommendations);
@@ -16,8 +16,12 @@ describe("Recommendations tests - POST /recommendations", () => {
     const response = await supertest(app)
       .post("/recommendations")
       .send(body[0]);
+    const createRecommendation = await prisma.recommendation.findUnique({
+      where: { name: body[0].name },
+    });
 
     expect(response.status).toEqual(201);
+    expect(createRecommendation).not.toBeNull();
   });
 
   it("should return 422 given invalid body", async () => {
