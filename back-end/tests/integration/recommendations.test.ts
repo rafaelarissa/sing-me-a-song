@@ -2,8 +2,8 @@ import supertest from "supertest";
 import app from "../../src/app";
 import { prisma } from "../../src/database.js";
 import { CreateRecommendationData } from "../../src/services/recommendationsService.js";
-import recommendationBodyFactory from "../factory/recommendationBodyFactory.js";
-import recommendationFactory from "../factory/recommendationsFactory";
+import recommendationBodyFactory from "./../factory/recommendationBodyFactory.js";
+import recommendationFactory from "./../factory/recommendationsFactory";
 
 describe("Recommendations tests - POST /recommendations", () => {
   beforeEach(truncateRecommendations);
