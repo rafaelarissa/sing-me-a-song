@@ -1,11 +1,11 @@
 import { jest } from "@jest/globals";
-import exp from "constants";
-import { conflictError } from "../../src/utils/errorUtils";
+import { conflictError, notFoundError } from "../../src/utils/errorUtils";
 import { recommendationRepository } from "./../../src/repositories/recommendationRepository";
 import {
   CreateRecommendationData,
   recommendationService,
 } from "./../../src/services/recommendationsService";
+import recommendationsFactory from "../factory/recommendationsFactory.js";
 
 describe("REcommendation Service Unit Tests", () => {
   beforeEach(() => {
@@ -25,5 +25,47 @@ describe("REcommendation Service Unit Tests", () => {
     expect(async () => {
       await recommendationService.insert(duplicateRecommendation);
     }).rejects.toEqual(conflictError("Recommendations names must be unique"));
+  });
+
+  it("should not found recommendation upvote", async () => {
+    jest.spyOn(recommendationRepository, "find").mockResolvedValue(null);
+
+    expect(async () => {
+      await recommendationService.upvote(1);
+    }).rejects.toEqual(notFoundError());
+  });
+
+  it("should not found recommendation downvote", async () => {
+    jest.spyOn(recommendationRepository, "find").mockResolvedValue(null);
+
+    expect(async () => {
+      await recommendationService.downvote(1);
+    }).rejects.toEqual(notFoundError());
+  });
+
+  it("should remove recommendation downvote", async () => {
+    const recommendation = recommendationsFactory();
+
+    jest
+      .spyOn(recommendationRepository, "find")
+      .mockResolvedValue(recommendation[2]);
+    jest
+      .spyOn(recommendationRepository, "updateScore")
+      .mockResolvedValue(recommendation[2]);
+
+    const remove = jest
+      .spyOn(recommendationRepository, "remove")
+      .mockResolvedValue(null);
+
+    await recommendationService.downvote(recommendation[2].id);
+
+    expect(recommendationRepository.updateScore).toBeCalledWith(
+      recommendation[2].id,
+      "decrement"
+    );
+    expect(recommendationRepository.remove).toBeCalledWith(
+      recommendation[2].id
+    );
+    expect(remove).toHaveBeenCalledTimes(1);
   });
 });
